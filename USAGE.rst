@@ -34,9 +34,37 @@ To develop on mapscookiegettercli:
     _CI/scripts/document.py
 
 
-To use mapscookiegettercli in a project:
+To use mapscookiegettercli:
 
-.. code-block:: python
+    # For this to work python3.7 and pipenv should be available
 
-    from mapscookiegettercli import Mapscookiegettercli
-    mapscookiegettercli = Mapscookiegettercli()
+.. code-block:: bash
+
+    # Make pipenv use local directory
+    export PIPENV_VENV_IN_PROJECT=true
+
+    # Clone the repository
+    git clone https://github.com/costastf/mapscookiegettercli.git
+
+    # Switch to working branch
+    git checkout initial-usability
+
+    # Source helper tools
+    source setup_aliases.sh
+
+    # Build artifact
+    # This will setup a new virtual environment, install all dependencies and build the artifact
+    `_build
+
+    # Install built artifact
+    # This will create a new virtual environment installing the artifact and all required dependencies.
+    pipenv install dist/mapscookiegettercli-0.0.0.tar.gz
+
+    # Activate the virtual environment
+    _activate
+
+    # execute the tool
+    maps-cookie-getter
+
+    # After the full login process the browser should be terminated and a "location_sharing.cookies" file should
+    # be located at the same location that can be provided to the locationsharinglib.
