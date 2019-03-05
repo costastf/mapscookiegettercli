@@ -57,7 +57,7 @@ setup(
                    'console_scripts': [
                        # enable this to automatically generate a script in /usr/local/bin called myscript that points to your
                        #  mapscookiegettercli.mapscookiegettercli:main method
-                       # 'myscript = mapscookiegettercli.mapscookiegettercli:main'
+                       'maps-cookie-getter = mapscookiegettercli.mapscookiegettercli:main'
                    ]},
     classifiers=[
         'Development Status :: 4 - Beta',

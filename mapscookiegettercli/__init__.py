@@ -32,7 +32,7 @@ Import all parts from mapscookiegettercli here
    http://google.github.io/styleguide/pyguide.html
 """
 from ._version import __version__
-from .library import CookieGetter
+from .library.cookiegetter import CookieGetter
 
 __author__ = '''Costas Tyfoxylos <costas.tyf@gmail.com>'''
 __docformat__ = '''google'''

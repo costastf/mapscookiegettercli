@@ -55,17 +55,28 @@ LOGGER_BASENAME = '''cookiegetter'''
 LOGGER = logging.getLogger(LOGGER_BASENAME)
 LOGGER.addHandler(logging.NullHandler())
 
+MAPS_LOGIN = ('https://accounts.google.com/signin/v2/identifier?'
+              'hl=en&'
+              'passive=true&'
+              'continue=https%3A%2F%2Fwww.google.com%2Fmaps%2F%4040.7484986%2C-73.9857129%2C15z&'
+              'service=local&'
+              'flowName=GlifWebSignIn&'
+              'flowEntry=ServiceLogin')
 
-class CookieGetter:
+
+class CookieGetter:  # pylint: disable=too-few-public-methods
     """Object able to retrieve the cookies from an interactive login session to a google maps service"""
 
     def __init__(self):
         logger_name = u'{base}.{suffix}'.format(base=LOGGER_BASENAME,
                                                 suffix=self.__class__.__name__)
         self._logger = logging.getLogger(logger_name)
-        self.os = self._identify_os()
+        self.os = self._identify_os()  # pylint: disable=invalid-name
+        self._logger.info('Identified OS as %s', self.os)
         self.default_browser = self._identify_default_browser(self.os)
+        self._logger.info('Identified default browser as %s', self.default_browser)
         self.drivers_path = Path(__file__).parent.joinpath('..' '/drivers')
+        self._logger.info('Set selenium drivers path as "%s"', self.drivers_path)
 
     @staticmethod
     def _identify_os():
@@ -88,7 +99,7 @@ class CookieGetter:
 
     @staticmethod
     def _identify_browser_mac():
-        from plistlib import load, FMT_BINARY
+        from plistlib import load, FMT_BINARY  # pylint: disable=no-name-in-module
         supported_browsers = ('firefox', 'safari', 'chrome', 'opera')
         default_browser_plist_path = ('~/Library/Preferences/com.apple.LaunchServices/'
                                       'com.apple.launchservices.secure.plist')
@@ -105,7 +116,7 @@ class CookieGetter:
 
     @staticmethod
     def _identify_browser_windows():
-        from winreg import HKEY_CURRENT_USER, HKEY_CLASSES_ROOT, OpenKey, QueryValueEx
+        from winreg import HKEY_CURRENT_USER, HKEY_CLASSES_ROOT, OpenKey, QueryValueEx  # pylint: disable=import-error
         supported_browsers = ('firefox', 'safari', 'chrome', 'opera', 'edge', 'ie')
         default_browser_registry_path = (r'Software\Microsoft\Windows\Shell\Associations'
                                          r'\UrlAssociations\https\UserChoice')
@@ -133,21 +144,27 @@ class CookieGetter:
         except FileNotFoundError:
             print('Could not execute xdg-settings, propably unsupported version of linux.')
             return 'unknown'
-        output, error = get_browser_command.communicate()
+        output, _ = get_browser_command.communicate()
         browser = next((browser for browser in supported_browsers
                         if browser in output.decode('utf-8')),
                        'unknown')
         return browser
 
-    def run(self):
+    def run(self, cookie_file_name='location_sharing.cookies'):
+        """Executes the process and saves the cookies
+
+        Args:
+            cookie_file_name (str): The path and name of the exported cookie file
+
+        Returns:
+
+        """
         self._bootstrap_browser()
         from selenium import webdriver
         from selenium.webdriver.chrome.options import Options
-
         versions = webdriver_manager.versions(self.drivers_path, [self.default_browser])
         driver_name = versions['chromedriver'][0][1]
         path_to_chromedriver = Path(self.drivers_path) / driver_name
-
         chrome_options = Options()
         chrome_options.add_argument('--disable-extensions')
         chrome_options.add_argument('--profile-directory=Default')
@@ -155,26 +172,34 @@ class CookieGetter:
         chrome_options.add_argument('--disable-plugins-discovery')
         chrome_options.add_argument('--start-maximized')
         chrome_options.add_argument('--disable-infobars')
+        self._logger.info('Starting up chrome driven by selenium')
         driver = webdriver.Chrome(executable_path=path_to_chromedriver, chrome_options=chrome_options)
+        self._logger.info('Deleting all cookies')
         driver.delete_all_cookies()
-        login_url = 'https://accounts.google.com/signin/v2/identifier?hl=en&passive=true&continue=https%3A%2F%2Fwww.google.com%2Fmaps%2F%4052.3499986%2C4.9115129%2C15z&service=local&flowName=GlifWebSignIn&flowEntry=ServiceLogin'
-        driver.get(login_url)
-        return driver
+        self._logger.info('Starting interactive login process.')
+        driver.get(MAPS_LOGIN)
+        from time import sleep
+        while 'See travel times, traffic and nearby places' not in driver.page_source:
+            sleep(0.5)
+        self._logger.info('Log in successful, getting session cookies.')
+        from requests import Session
+        session = Session()
+        self._logger.info('Transfering cookies to a requests session.')
+        for cookie in driver.get_cookies():
+            for invalid in ['httpOnly', 'expiry']:
+                try:
+                    del cookie[invalid]
+                except KeyError:
+                    pass
+            session.cookies.set(**cookie)
+        self._logger.info('Saving the requests session to pickled file "%s".', cookie_file_name)
+        with open(cookie_file_name, 'wb') as ofile:
+            pickle.dump(session.cookies, ofile)
+        self._logger.info('Terminating browser session.')
+        driver.close()
+
+        # selenium.common.exceptions.NoSuchWindowException: Message: no such window: window was already closed
 
     def _bootstrap_browser(self):
+        self._logger.info('Bootstrapping selenium by downloading appropriate driver')
         webdriver_manager.update(self.default_browser, self.drivers_path)
-
-    def save_cookies(self, driver, cookie_file_name='location_sharing.cookies'):
-        if 'id="nearby-suggestions"' in driver.page_source:
-            from requests import Session
-            session = Session()
-            for cookie in driver.get_cookies():
-                for invalid in ['httpOnly', 'expiry']:
-                    try:
-                        del cookie[invalid]
-                    except:
-                        pass
-                session.cookies.set(**cookie)
-                with open(cookie_file_name, 'wb') as f:
-                    pickle.dump(session.cookies, f)
-            driver.close()
