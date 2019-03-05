@@ -54,7 +54,7 @@ To use mapscookiegettercli:
 
     # Build artifact
     # This will setup a new virtual environment, install all dependencies and build the artifact
-    `_build
+    _build
 
     # Install built artifact
     # This will create a new virtual environment installing the artifact and all required dependencies.
@@ -66,5 +66,5 @@ To use mapscookiegettercli:
     # execute the tool
     maps-cookie-getter
 
-    # After the full login process the browser should be terminated and a "location_sharing.cookies" file should
-    # be located at the same location that can be provided to the locationsharinglib.
+    # After the full login process the browser should be terminated and a "location_sharing.cookies"
+    # file should be located at the same location that can be provided to the locationsharinglib.
