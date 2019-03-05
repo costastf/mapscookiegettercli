@@ -32,6 +32,7 @@ Import all parts from mapscookiegettercli here
    http://google.github.io/styleguide/pyguide.html
 """
 from ._version import __version__
+from .library import CookieGetter
 
 __author__ = '''Costas Tyfoxylos <costas.tyf@gmail.com>'''
 __docformat__ = '''google'''
@@ -44,3 +45,6 @@ __status__ = '''Development'''  # "Prototype", "Development", "Production".
 
 # This is to 'use' the module(s), so lint doesn't complain
 assert __version__
+
+# assert objects
+assert CookieGetter

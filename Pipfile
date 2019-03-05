@@ -35,3 +35,5 @@ emoji = "~=0.5.1"
 [packages]
 
 coloredlogs = "~=10.0"
+py-webdriver-manager = "~=0.0.2"
+selenium = "~=3.141.0"
