@@ -64,4 +64,4 @@ Instead use the provided build and upload scripts that create all the necessary 
 Project Features
 ================
 
-* TODO
+* Current proof of concept state only works for Mac os with chrome as default browser (and possibly linux with chrome, not tested.)
