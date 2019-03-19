@@ -8,5 +8,5 @@
 # Please use Pipfile to update the requirements.
 #
 coloredlogs~=10.0
-py-webdriver-manager~=0.0.2
 selenium~=3.141.0
+webdriver-manager~=1.7
