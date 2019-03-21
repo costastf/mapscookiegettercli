@@ -32,6 +32,8 @@ firefox package
 
 import logging
 
+from pathlib import Path
+
 from webdriver_manager.firefox import GeckoDriverManager
 from selenium.webdriver.firefox.options import Options
 from selenium import webdriver
@@ -58,13 +60,16 @@ class Firefox:  # pylint: disable=too-few-public-methods
         logger_name = u'{base}.{suffix}'.format(base=LOGGER_BASENAME,
                                                 suffix='bootstrapper')
         logger = logging.getLogger(logger_name)
+        print(Path(__file__).parent.joinpath('FirefoxProfile'))
+        profile = webdriver.FirefoxProfile(Path(__file__).parent.joinpath('FirefoxProfile'))
         options = Options()
-        options.add_argument('-P=default')
-        # options.add_argument('--safe-mode')
-        # options.add_argument('--browser')
-        # options.add_argument('--private-window')
+        # options.add_argument(f'-P=')
+        options.add_argument('--safe-mode')
+        options.add_argument('--browser')
+        options.add_argument('--private-window')
+        options.add_argument('--new-instance')
         logger.info('Starting up firefox driven by selenium')
-        driver = webdriver.Firefox(executable_path=GeckoDriverManager().install(), firefox_options=options)
+        driver = webdriver.Firefox(profile, executable_path=GeckoDriverManager().install(), firefox_options=options)
         logger.info('Deleting all cookies')
         driver.delete_all_cookies()
         logger.info('Returning driver')

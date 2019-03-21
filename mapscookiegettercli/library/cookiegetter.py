@@ -187,5 +187,5 @@ class CookieGetter:  # pylint: disable=too-few-public-methods
             pickle.dump(session.cookies, ofile)
         self._logger.info('Terminating browser session.')
         driver.close()
-        # TODO properly handly exception raised if user closes browser before finishing process
+        # TODO properly handly exception raised if user closes browser before finishing process  # pylint: disable=fixme
         # selenium.common.exceptions.NoSuchWindowException: Message: no such window: window was already closed
