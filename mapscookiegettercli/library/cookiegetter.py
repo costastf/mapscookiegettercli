@@ -41,7 +41,7 @@ from requests import Session
 from selenium.common.exceptions import NoSuchWindowException
 
 from mapscookiegettercli.mapscookiegettercliexceptions import UnsupportedOS, UnsupportedDefaultBrowser
-from mapscookiegettercli.browsers import Chrome, Firefox
+from mapscookiegettercli.browsers import Chrome, Firefox, IE, Edge
 
 __author__ = '''Costas Tyfoxylos <costas.tyf@gmail.com>'''
 __docformat__ = '''google'''
@@ -156,7 +156,9 @@ class CookieGetter:  # pylint: disable=too-few-public-methods
 
     def _get_driver(self):
         browsers = {'chrome': Chrome,
-                    'firefox': Firefox}
+                    'firefox': Firefox,
+                    'ie': IE,
+                    'edge': Edge}
         return browsers.get(self.default_browser)()
 
     def run(self, cookie_file_name='location_sharing.cookies'):
