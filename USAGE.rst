@@ -36,32 +36,11 @@ To develop on mapscookiegettercli:
 
 To use mapscookiegettercli:
 
-    # For this to work python3.7 and pipenv should be available
 
 .. code-block:: bash
 
-    # Make pipenv use local directory
-    export PIPENV_VENV_IN_PROJECT=true
-
-    # Clone the repository
-    git clone https://github.com/costastf/mapscookiegettercli.git
-
-    # Switch to working branch
-    git checkout initial-usability
-
-    # Source helper tools
-    source setup_aliases.sh
-
-    # Build artifact
-    # This will setup a new virtual environment, install all dependencies and build the artifact
-    _build
-
-    # Install built artifact
-    # This will create a new virtual environment installing the artifact and all required dependencies.
-    pipenv install dist/mapscookiegettercli-0.0.0.tar.gz
-
-    # Activate the virtual environment
-    _activate
+    # install tool
+    pip install mapscookiegettercli
 
     # execute the tool
     maps-cookie-getter
