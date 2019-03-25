@@ -64,4 +64,9 @@ Instead use the provided build and upload scripts that create all the necessary 
 Project Features
 ================
 
-* TODO
+* Successfully detects and uses Firefox and Chrome in Mac (latest version tested), Linux (Ubuntu 18.04 with budgie desktop tested) and Windows 7
+* Todo:
+
+    Test Internet explorer and Edge on Windows and test windows 8 and 10.
+
+    Extend error handling for all environments.

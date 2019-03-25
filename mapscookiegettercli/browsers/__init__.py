@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File: mapscookiegettercliexceptions.py
+# File: __init__.py
 #
 # Copyright 2019 Costas Tyfoxylos
 #
@@ -24,27 +24,31 @@
 #
 
 """
-Custom exception code for mapscookiegettercli
+library package
+
+Import all parts from library here
 
 .. _Google Python Style Guide:
    http://google.github.io/styleguide/pyguide.html
-
 """
+
+from .chrome import Chrome
+from .firefox import Firefox
+from .ie import IE
+from .edge import Edge
 
 __author__ = '''Costas Tyfoxylos <costas.tyf@gmail.com>'''
 __docformat__ = '''google'''
 __date__ = '''04-03-2019'''
 __copyright__ = '''Copyright 2019, Costas Tyfoxylos'''
-__credits__ = ["Costas Tyfoxylos"]
 __license__ = '''MIT'''
 __maintainer__ = '''Costas Tyfoxylos'''
 __email__ = '''<costas.tyf@gmail.com>'''
 __status__ = '''Development'''  # "Prototype", "Development", "Production".
 
+# This is to 'use' the module(s), so lint doesn't complain
 
-class UnsupportedOS(Exception):
-    """The os identified is not a supported one."""
-
-
-class UnsupportedDefaultBrowser(Exception):
-    """The browser could not be identified or is not supported."""
+assert Chrome
+assert Firefox
+assert IE
+assert Edge

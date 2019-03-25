@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File: mapscookiegettercliexceptions.py
+# File: firefox.py
 #
 # Copyright 2019 Costas Tyfoxylos
 #
@@ -24,27 +24,44 @@
 #
 
 """
-Custom exception code for mapscookiegettercli
+firefox package
 
 .. _Google Python Style Guide:
    http://google.github.io/styleguide/pyguide.html
-
 """
+
+import logging
+
+
+from webdriver_manager.firefox import GeckoDriverManager
+from selenium import webdriver
 
 __author__ = '''Costas Tyfoxylos <costas.tyf@gmail.com>'''
 __docformat__ = '''google'''
 __date__ = '''04-03-2019'''
 __copyright__ = '''Copyright 2019, Costas Tyfoxylos'''
-__credits__ = ["Costas Tyfoxylos"]
 __license__ = '''MIT'''
 __maintainer__ = '''Costas Tyfoxylos'''
 __email__ = '''<costas.tyf@gmail.com>'''
 __status__ = '''Development'''  # "Prototype", "Development", "Production".
 
+# This is the main prefix used for logging
+LOGGER_BASENAME = '''firefox'''
+LOGGER = logging.getLogger(LOGGER_BASENAME)
+LOGGER.addHandler(logging.NullHandler())
 
-class UnsupportedOS(Exception):
-    """The os identified is not a supported one."""
 
+class Firefox:  # pylint: disable=too-few-public-methods
+    """Bootstraps a firefox selenium driver with the required settings"""
 
-class UnsupportedDefaultBrowser(Exception):
-    """The browser could not be identified or is not supported."""
+    def __new__(cls):
+        logger_name = u'{base}.{suffix}'.format(base=LOGGER_BASENAME,
+                                                suffix='bootstrapper')
+        logger = logging.getLogger(logger_name)
+        logger.info('Starting up firefox driven by selenium')
+        driver = webdriver.Firefox(firefox_profile=webdriver.FirefoxProfile(),
+                                   executable_path=GeckoDriverManager().install())
+        logger.info('Deleting all cookies')
+        driver.delete_all_cookies()
+        logger.info('Returning driver')
+        return driver

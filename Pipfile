@@ -35,3 +35,5 @@ emoji = "~=0.5.1"
 [packages]
 
 coloredlogs = "~=10.0"
+selenium = "~=3.141.0"
+webdriver-manager = "~=1.7"
