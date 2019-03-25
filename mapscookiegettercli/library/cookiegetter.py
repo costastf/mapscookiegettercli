@@ -174,23 +174,28 @@ class CookieGetter:  # pylint: disable=too-few-public-methods
             driver.get(MAPS_LOGIN)
             while LOGGED_IN_HEURISTIC not in driver.page_source:
                 sleep(0.5)
-            self._logger.info('Log in successful, getting session cookies.')
-            session = Session()
-            self._logger.info('Transferring cookies to a requests session.')
-            for cookie in driver.get_cookies():
-                for invalid in ['httpOnly', 'expiry']:
-                    try:
-                        del cookie[invalid]
-                    except KeyError:
-                        pass
-                session.cookies.set(**cookie)
-            self._logger.info('Saving the requests session to pickled file "%s".', cookie_file_name)
-            with open(cookie_file_name, 'wb') as ofile:
-                pickle.dump(session.cookies, ofile)
+            session = self._get_session(driver)
+            self._save_cookies(session, cookie_file_name)
             self._logger.info('Terminating browser session.')
             driver.close()
             driver.quit()
         except NoSuchWindowException:
             self._logger.warning('Window disappeared, seems like it was closed manually')
-        # TODO properly handly exception raised if user closes browser before finishing process  # pylint: disable=fixme
-        # selenium.common.exceptions.NoSuchWindowException: Message: no such window: window was already closed
+
+    def _get_session(self, driver):
+        self._logger.info('Log in successful, getting session cookies.')
+        session = Session()
+        self._logger.info('Transferring cookies to a requests session.')
+        for cookie in driver.get_cookies():
+            for invalid in ['httpOnly', 'expiry']:
+                try:
+                    del cookie[invalid]
+                except KeyError:
+                    pass
+            session.cookies.set(**cookie)
+        return session
+
+    def _save_cookies(self, session, file_name):
+        self._logger.info('Saving the requests session to pickled file "%s".', file_name)
+        with open(file_name, 'wb') as ofile:
+            pickle.dump(session.cookies, ofile)
