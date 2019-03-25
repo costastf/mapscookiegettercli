@@ -38,6 +38,7 @@ from pathlib import Path
 from time import sleep
 
 from requests import Session
+from selenium.common.exceptions import NoSuchWindowException
 
 from mapscookiegettercli.mapscookiegettercliexceptions import UnsupportedOS, UnsupportedDefaultBrowser
 from mapscookiegettercli.browsers import Chrome, Firefox
@@ -169,23 +170,27 @@ class CookieGetter:  # pylint: disable=too-few-public-methods
         """
         driver = self._get_driver()
         self._logger.info('Starting interactive login process.')
-        driver.get(MAPS_LOGIN)
-        while LOGGED_IN_HEURISTIC not in driver.page_source:
-            sleep(0.5)
-        self._logger.info('Log in successful, getting session cookies.')
-        session = Session()
-        self._logger.info('Transferring cookies to a requests session.')
-        for cookie in driver.get_cookies():
-            for invalid in ['httpOnly', 'expiry']:
-                try:
-                    del cookie[invalid]
-                except KeyError:
-                    pass
-            session.cookies.set(**cookie)
-        self._logger.info('Saving the requests session to pickled file "%s".', cookie_file_name)
-        with open(cookie_file_name, 'wb') as ofile:
-            pickle.dump(session.cookies, ofile)
-        self._logger.info('Terminating browser session.')
-        driver.close()
+        try:
+            driver.get(MAPS_LOGIN)
+            while LOGGED_IN_HEURISTIC not in driver.page_source:
+                sleep(0.5)
+            self._logger.info('Log in successful, getting session cookies.')
+            session = Session()
+            self._logger.info('Transferring cookies to a requests session.')
+            for cookie in driver.get_cookies():
+                for invalid in ['httpOnly', 'expiry']:
+                    try:
+                        del cookie[invalid]
+                    except KeyError:
+                        pass
+                session.cookies.set(**cookie)
+            self._logger.info('Saving the requests session to pickled file "%s".', cookie_file_name)
+            with open(cookie_file_name, 'wb') as ofile:
+                pickle.dump(session.cookies, ofile)
+            self._logger.info('Terminating browser session.')
+            driver.close()
+            driver.quit()
+        except NoSuchWindowException:
+            self._logger.warning('Window disappeared, seems like it was closed manually')
         # TODO properly handly exception raised if user closes browser before finishing process  # pylint: disable=fixme
         # selenium.common.exceptions.NoSuchWindowException: Message: no such window: window was already closed
