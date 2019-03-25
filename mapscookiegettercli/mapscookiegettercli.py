@@ -61,8 +61,8 @@ def get_arguments():
     """
     # https://docs.python.org/3/library/argparse.html
     parser = argparse.ArgumentParser(description='''A tool to retrieve the cookies from a google authentication process
-                                                     towards the google maps service to be used with
-                                                     locationsharinglib.''')
+                                                    towards the google maps service to be used with locationsharinglib.
+                                                    ''')
     parser.add_argument('--log-level',
                         '-L',
                         help='Provide the log level. Defaults to info.',

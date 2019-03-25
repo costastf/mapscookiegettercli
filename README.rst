@@ -64,4 +64,9 @@ Instead use the provided build and upload scripts that create all the necessary 
 Project Features
 ================
 
-* Current proof of concept state only works for Mac os with chrome as default browser (and possibly linux with chrome, not tested.)
+* Successfully detects and uses Firefox and Chrome in Mac (latest version tested), Linux (Ubuntu 18.04 with budgie desktop tested) and Windows 7
+* Todo:
+
+    Test Internet explorer and Edge on Windows and test windows 8 and 10.
+
+    Extend error handling for all environments.
