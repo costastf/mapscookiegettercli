@@ -66,7 +66,7 @@ MAPS_LOGIN = ('https://accounts.google.com/signin/v2/identifier?'
               'flowName=GlifWebSignIn&'
               'flowEntry=ServiceLogin')
 
-LOGGED_IN_HEURISTIC = 'See travel times, traffic and nearby places'
+LOGGED_IN_HEURISTIC = 'Find local businesses, view maps and get driving directions in Google Maps.'
 
 
 class CookieGetter:  # pylint: disable=too-few-public-methods
