@@ -39,6 +39,8 @@ To use mapscookiegettercli:
 
 .. code-block:: bash
 
+    # python 3.7 is required since the code is using fstrings
+
     # install tool
     pip install mapscookiegettercli
 
