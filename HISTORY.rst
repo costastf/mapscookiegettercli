@@ -19,3 +19,9 @@ History
 ------------------
 
 * Removed fstring instance so python3.7 is not a hard requirement
+
+
+0.2.0 (16-06-2019)
+------------------
+
+* Initial release, enforced en locale for worldwide compatibility contributed by "https://github.com/Protonex"
