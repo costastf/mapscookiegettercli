@@ -36,11 +36,12 @@ To develop on mapscookiegettercli:
 
 To use mapscookiegettercli:
 
+    # This tool is written for python3.7
 
 .. code-block:: bash
 
-    # install tool
-    pip install mapscookiegettercli
+    Follow installation procedure from INSTALLATION.srt for your appropriate toolset.
+
 
     # execute the tool
     maps-cookie-getter
