@@ -131,7 +131,7 @@ class CookieGetter:  # pylint: disable=too-few-public-methods
                        None)
         if browser:
             return browser
-        with OpenKey(HKEY_CLASSES_ROOT, f'{program_id}\\Application') as key:
+        with OpenKey(HKEY_CLASSES_ROOT, '{program_id}\\Application'.format(program_id=program_id)) as key:
             application_name = QueryValueEx(key, 'ApplicationName')[0]
         browser = next((browser for browser in supported_browsers
                         if browser in application_name.lower()),

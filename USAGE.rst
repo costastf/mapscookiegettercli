@@ -22,10 +22,10 @@ To develop on mapscookiegettercli:
     _CI/scripts/build.py
 
     # To see the package version
-    _CI/scipts/tag.py
+    _CI/scripts/tag.py
 
     # To bump semantic versioning [--major|--minor|--patch]
-    _CI/scipts/tag.py --major|--minor|--patch
+    _CI/scripts/tag.py --major|--minor|--patch
 
     # To upload the project to a pypi repo if user and password are properly provided
     _CI/scripts/upload.py
@@ -41,6 +41,7 @@ To use mapscookiegettercli:
 .. code-block:: bash
 
     Follow installation procedure from INSTALLATION.srt for your appropriate toolset.
+
 
     # execute the tool
     maps-cookie-getter
