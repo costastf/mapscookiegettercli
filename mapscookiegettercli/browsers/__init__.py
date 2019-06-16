@@ -34,6 +34,8 @@ Import all parts from library here
 
 from .chrome import Chrome
 from .firefox import Firefox
+from .ie import IE
+from .edge import Edge
 
 __author__ = '''Costas Tyfoxylos <costas.tyf@gmail.com>'''
 __docformat__ = '''google'''
@@ -48,3 +50,5 @@ __status__ = '''Development'''  # "Prototype", "Development", "Production".
 
 assert Chrome
 assert Firefox
+assert IE
+assert Edge

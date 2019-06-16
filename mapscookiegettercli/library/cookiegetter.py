@@ -38,9 +38,10 @@ from pathlib import Path
 from time import sleep
 
 from requests import Session
+from selenium.common.exceptions import NoSuchWindowException
 
 from mapscookiegettercli.mapscookiegettercliexceptions import UnsupportedOS, UnsupportedDefaultBrowser
-from mapscookiegettercli.browsers import Chrome, Firefox
+from mapscookiegettercli.browsers import Chrome, Firefox, IE, Edge
 
 __author__ = '''Costas Tyfoxylos <costas.tyf@gmail.com>'''
 __docformat__ = '''google'''
@@ -155,7 +156,9 @@ class CookieGetter:  # pylint: disable=too-few-public-methods
 
     def _get_driver(self):
         browsers = {'chrome': Chrome,
-                    'firefox': Firefox}
+                    'firefox': Firefox,
+                    'ie': IE,
+                    'edge': Edge}
         return browsers.get(self.default_browser)()
 
     def run(self, cookie_file_name='location_sharing.cookies'):
@@ -169,9 +172,19 @@ class CookieGetter:  # pylint: disable=too-few-public-methods
         """
         driver = self._get_driver()
         self._logger.info('Starting interactive login process.')
-        driver.get(MAPS_LOGIN)
-        while LOGGED_IN_HEURISTIC not in driver.page_source:
-            sleep(0.5)
+        try:
+            driver.get(MAPS_LOGIN)
+            while LOGGED_IN_HEURISTIC not in driver.page_source:
+                sleep(0.5)
+            session = self._get_session(driver)
+            self._save_cookies(session, cookie_file_name)
+            self._logger.info('Terminating browser session.')
+            driver.close()
+            driver.quit()
+        except NoSuchWindowException:
+            self._logger.warning('Window disappeared, seems like it was closed manually')
+
+    def _get_session(self, driver):
         self._logger.info('Log in successful, getting session cookies.')
         session = Session()
         self._logger.info('Transferring cookies to a requests session.')
@@ -182,10 +195,9 @@ class CookieGetter:  # pylint: disable=too-few-public-methods
                 except KeyError:
                     pass
             session.cookies.set(**cookie)
-        self._logger.info('Saving the requests session to pickled file "%s".', cookie_file_name)
-        with open(cookie_file_name, 'wb') as ofile:
+        return session
+
+    def _save_cookies(self, session, file_name):
+        self._logger.info('Saving the requests session to pickled file "%s".', file_name)
+        with open(file_name, 'wb') as ofile:
             pickle.dump(session.cookies, ofile)
-        self._logger.info('Terminating browser session.')
-        driver.close()
-        # TODO properly handly exception raised if user closes browser before finishing process  # pylint: disable=fixme
-        # selenium.common.exceptions.NoSuchWindowException: Message: no such window: window was already closed
