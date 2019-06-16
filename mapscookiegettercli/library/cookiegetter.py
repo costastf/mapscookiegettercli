@@ -46,7 +46,7 @@ __author__ = '''Costas Tyfoxylos <costas.tyf@gmail.com>'''
 __docformat__ = '''google'''
 __date__ = '''04-03-2019'''
 __copyright__ = '''Copyright 2019, Costas Tyfoxylos'''
-__credits__ = ["Costas Tyfoxylos"]
+__credits__ = ["Costas Tyfoxylos", "https://github.com/Protonex"]
 __license__ = '''MIT'''
 __maintainer__ = '''Costas Tyfoxylos'''
 __email__ = '''<costas.tyf@gmail.com>'''
@@ -60,12 +60,12 @@ LOGGER.addHandler(logging.NullHandler())
 MAPS_LOGIN = ('https://accounts.google.com/signin/v2/identifier?'
               'hl=en&'
               'passive=true&'
-              'continue=https%3A%2F%2Fwww.google.com%2Fmaps%2F%4040.7484986%2C-73.9857129%2C15z&'
+              'continue=https%3A%2F%2Fwww.google.com%2Fmaps%2F%4040.7484986%2C-73.9857129%2C15z%3Fhl%3Den&'
               'service=local&'
               'flowName=GlifWebSignIn&'
               'flowEntry=ServiceLogin')
 
-LOGGED_IN_HEURISTIC = 'See travel times, traffic and nearby places'
+LOGGED_IN_HEURISTIC = 'Find local businesses, view maps and get driving directions in Google Maps.'
 
 
 class CookieGetter:  # pylint: disable=too-few-public-methods
