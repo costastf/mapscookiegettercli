@@ -2,6 +2,9 @@
 mapscookiegettercli
 ===================
 
+
+* POSSIBLY DEPRECATED SINCE THERE ARE REPORTS OF GOOGLE BLOCKING THIS. SEE #1
+
 A tool to retreive the cookies from a google authentication process towards the google maps service to be used with locationsharinglib.
 
 
